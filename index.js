@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from 'dotenv';
 import helmet from "helmet";
+import apiRouter from "./routes/api.route.js";
 const arg = process.argv;
 
 dotenv.config();
@@ -24,6 +25,7 @@ try {
      process.exit(1);
 }
 
+app.use("/api", apiRouter);
 
 app.get("/", (req, res) => {
      res.send('Hello World!');
