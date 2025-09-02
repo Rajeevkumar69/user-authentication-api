@@ -32,7 +32,7 @@ const validationHelper = [
           } else {
                return false;
           }
-     }).withMessage('PLease upload an image JPEG or PNG')
+     }).withMessage('Please upload an image JPEG or PNG')
 
 
 ]
