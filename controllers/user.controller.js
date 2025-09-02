@@ -1,30 +1,22 @@
 import { StatusCodes } from "http-status-codes";
 import bcrypt from 'bcrypt';
+import { validationResult } from 'express-validator';
 import userModel from "../models/user.model.js";
 
 const { CREATED, INTERNAL_SERVER_ERROR, ACCEPTED, BAD_REQUEST, FORBIDDEN, OK, REQUEST_TIMEOUT } = StatusCodes;
 
 export const userRegister = async (req, res) => {
      try {
-          const { name, email, contact, password, confirmPassword } = req.body;
+          const validUser = validationResult(req);
+          if (!validUser.isEmpty()) {
+               return res.status(BAD_REQUEST).json({
+                    success: false,
+                    status: BAD_REQUEST,
+                    message: validUser.array().map(err => err.msg)
+               });
+          }
 
-          const isUserExist = await userModel.findOne({ email });
-          if (isUserExist) {
-               return res.status(BAD_REQUEST).json({
-                    success: false,
-                    status: BAD_REQUEST,
-                    message: "User with same email already exist",
-                    data: {}
-               });
-          }
-          if (password !== confirmPassword) {
-               return res.status(BAD_REQUEST).json({
-                    success: false,
-                    status: BAD_REQUEST,
-                    message: "Password and Confirm password doesn't matched",
-                    data: {}
-               });
-          }
+          const { name, email, contact, password, confirmPassword } = req.body;
 
           const hashPassword = await bcrypt.hash(password, 10)
           const newUser = new userModel({
@@ -39,7 +31,7 @@ export const userRegister = async (req, res) => {
           return res.status(CREATED).json({
                success: true,
                status: CREATED,
-               message: "User registerd successfully",
+               message: "User registered successfully",
                data: {
                     id: newUser._id,
                     name: newUser.name,
