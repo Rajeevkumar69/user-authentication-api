@@ -42,7 +42,7 @@ A secure Node.js + Express.js + MongoDB based authentication service with email 
 
 * **Backend**: Node.js, Express.js
 * **Database**: MongoDB, Mongoose
-* **Security**: Helmet, Bcrypt
+* **Security**: Helmet, Bcrypt, Cors
 * **Validation**: Express-Validator
 * **Mailer**: Nodemailer with Gmail SMTP
 * **Templating**: EJS
