@@ -2,6 +2,7 @@ import { StatusCodes } from "http-status-codes";
 import bcrypt from 'bcrypt';
 import { validationResult } from 'express-validator';
 import userModel from "../models/user.model.js";
+import sendMail from '../helpers/mailer.js';
 
 const { CREATED, INTERNAL_SERVER_ERROR, ACCEPTED, BAD_REQUEST, FORBIDDEN, OK, REQUEST_TIMEOUT } = StatusCodes;
 
@@ -18,7 +19,7 @@ export const userRegister = async (req, res) => {
 
           const { name, email, contact, password, confirmPassword } = req.body;
 
-          const hashPassword = await bcrypt.hash(password, 10)
+          const hashPassword = await bcrypt.hash(password, 10);
           const newUser = new userModel({
                name: name,
                email: email,
@@ -28,6 +29,12 @@ export const userRegister = async (req, res) => {
                profileImage: "images/" + req.file.filename
           });
           await newUser.save();
+
+          const message = `<p>Hello ${name}, Thanks for registering
+                Please verify your mail <a href="http://localhost:4800/verify-mail?id=${newUser._id}">Verify</a>
+           </p>`;
+          await sendMail(email, 'User Authentication', message);
+
           return res.status(CREATED).json({
                success: true,
                status: CREATED,
@@ -41,15 +48,12 @@ export const userRegister = async (req, res) => {
                     isVerified: newUser.isVerified
                }
           });
-
      } catch (err) {
-          return res
-               .status(INTERNAL_SERVER_ERROR)
-               .json({
-                    success: false,
-                    status: INTERNAL_SERVER_ERROR,
-                    message: err.message,
-                    data: {}
-               });
+          return res.status(INTERNAL_SERVER_ERROR).json({
+               success: false,
+               status: INTERNAL_SERVER_ERROR,
+               message: err.message,
+               data: {}
+          });
      }
-}
+};
