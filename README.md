@@ -1,4 +1,4 @@
-# User Authentication & Verification API
+# User Authentication API
 
 A secure Node.js + Express.js + MongoDB based authentication service with email verification, built for scalability and future extensions like JWT authentication, login sessions, and role-based access.
 
