@@ -4,13 +4,15 @@ import cors from "cors";
 import dotenv from 'dotenv';
 import helmet from "helmet";
 import apiRouter from "./routes/api.route.js";
+import authRouter from "./routes/auth.route.js";
 const arg = process.argv;
 
 dotenv.config();
 
 const app = express();
 app.use(express.json());
-app.use(express.urlencoded({ extends: true }));
+app.use(express.urlencoded({ extended: true }));
+app.set('view engine', 'ejs');
 app.use(cors());
 app.use(helmet());
 
@@ -26,11 +28,11 @@ try {
 }
 
 app.use("/api", apiRouter);
+app.use('/', authRouter);
 
 app.get("/", (req, res) => {
-     res.send('Hello World!');
+     res.send(`Hello World!`);
 });
-
 
 app.listen(arg[2], () => {
      console.log(`Server running on ${arg[2]}`);

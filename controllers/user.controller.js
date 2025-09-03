@@ -57,3 +57,50 @@ export const userRegister = async (req, res) => {
           });
      }
 };
+
+export const verifyUserEmail = async (req, res) => {
+     try {
+          const userId = req.query.id;
+          const action = req.query.action;
+
+          if (!userId) {
+               return res.render("error-page");
+          }
+
+          const user = await userModel.findById(userId);
+          if (!user) {
+               return res.render("email-verification", {
+                    step: "message",
+                    name: "Guest",
+                    message: "User Not Found"
+               });
+          }
+
+          if (user.isVerified === 1) {
+               return res.render("email-verification", {
+                    step: "message",
+                    name: user.name,
+                    message: "Your email is already verified."
+               });
+          }
+
+          if (action === "verify") {
+               await userModel.findByIdAndUpdate(userId, { $set: { isVerified: 1 } });
+               return res.render("email-verification", {
+                    step: "message",
+                    name: user.name,
+                    message: "Email successfully verified. We're glad to onboard you!"
+               });
+          }
+
+          return res.render("email-verification", {
+               step: "verify-ui",
+               name: user.name,
+               verifyUrl: `http://localhost:4800/verify-mail?id=${user._id}&action=verify`,
+               message: ""
+          });
+
+     } catch (err) {
+          return res.render("error-page");
+     }
+};
