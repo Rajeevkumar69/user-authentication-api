@@ -63,7 +63,7 @@ A secure Node.js + Express.js + MongoDB based authentication service with email 
 
 1. Clone repository & install dependencies
 2. Add `.env` file with database URL, name, email credentials, port
-3. Run `npm start` or `node index.js <PORT>`
+3. Run `nodemon index.js 4800` or `nodemon index.js <PORT>`
 4. Access app via `http://localhost:<PORT>`
 
 ------------------------------------------
