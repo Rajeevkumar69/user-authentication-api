@@ -66,6 +66,4 @@ A secure Node.js + Express.js + MongoDB based authentication service with email 
 3. Run `npm start` or `node index.js <PORT>`
 4. Access app via `http://localhost:<PORT>`
 
----
-
-Do you want me to also **include an example `.env` file section** in the README (with placeholders like `DB_URL`, `DB_NAME`, `EMAIL_PASSWORD`), so developers know exactly what to configure?
+------------------------------------------
